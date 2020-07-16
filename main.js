@@ -21,7 +21,7 @@ wss.on('connection', function connection(ws) {
 
             uidmapping[payload.target].send(JSON.stringify({
                 author: identity,
-                ...message
+                ...payload
             }));
         }
     });
