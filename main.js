@@ -1,25 +1,27 @@
 const WebSocket = require('ws');
 
-const wss = new WebSocket.Server({port: 8080});
+let port = process.execArgv[1] || 8080;
 
-const uidmapping = {};
+const wss = new WebSocket.Server({
+    port: port
+}, function () {
+    console.info(`WebSocket server started on port ${port}`);
+});
+
+const connections = {};
 
 wss.on('connection', function connection(ws) {
-    console.log("New connection")
-    let identityHasBeenReceived = false;
     let identity;
 
     ws.on('message', function incoming(message) {
-        console.debug(message);
-        if (!identityHasBeenReceived) {
+        if (identity === undefined) {
             // Very insecure, we will take the user's identity for who they say they are
             identity = message;
-            uidmapping[message] = ws;
-            identityHasBeenReceived = true;
+            connections[message] = ws;
         } else {
             const payload = JSON.parse(message);
 
-            uidmapping[payload.target].send(JSON.stringify({
+            connections[payload.target].send(JSON.stringify({
                 author: identity,
                 ...payload
             }));
@@ -27,6 +29,6 @@ wss.on('connection', function connection(ws) {
     });
 
     ws.on("close", () => {
-        uidmapping[identity] = null;
+        connections[identity] = null;
     });
 });

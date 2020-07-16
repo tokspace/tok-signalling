@@ -1,13 +1,18 @@
 {
   "name": "tok-signalling",
+  "private": true,
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple, highly specialized signalling server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node main.js"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "email": "aanand@akainth.me",
+    "name": "Aanand Kainth",
+    "url": "https://akainth.me"
+  },
   "license": "ISC",
   "dependencies": {
     "ws": "^7.3.1"
