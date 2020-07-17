@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 
-let port = process.execArgv[1] || 8080;
+const port = process.env.PORT || process.execArgv[1] || 8080;
 
 const wss = new WebSocket.Server({
     port: port
