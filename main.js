@@ -24,12 +24,17 @@ wss.on('connection', function connection(ws) {
             console.debug(`Got message ${JSON.stringify(payload.data)} from ${identity}`)
             if (connections[payload.target]) {
                 console.log(`sending to ${payload.target}`)
-                connections[payload.target].send(JSON.stringify(payload.data))
+                const returnPayload = {
+                    "origin": identity,
+                    "data": payload.data,
+                }
+                connections[payload.target].send(JSON.stringify(returnPayload))
             }
         }
     });
 
     ws.on("close", () => {
+        console.debug(`Connection ${identity} closed`)
         connections[identity] = null;
     });
 });
