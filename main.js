@@ -15,17 +15,17 @@ wss.on('connection', function connection(ws) {
 
     ws.on('message', function incoming(message) {
         if (identity === undefined) {
-            console.debug(`New connection from ${message}`)
             // Very insecure, we will take the user's identity for who they say they are
             identity = message;
+            console.debug(`New connection from ${identity}`)
             connections[message] = ws;
         } else {
             const payload = JSON.parse(message);
-
-            if (connections[payload.target]) connections[payload.target].send(JSON.stringify({
-                author: identity,
-                ...payload
-            }));
+            console.debug(`Got message ${JSON.stringify(payload.data)} from ${identity}`)
+            if (connections[payload.target]) {
+                console.log(`sending to ${payload.target}`)
+                connections[payload.target].send(JSON.stringify(payload.data))
+            }
         }
     });
 
